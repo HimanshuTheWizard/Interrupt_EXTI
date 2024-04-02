@@ -1,6 +1,4 @@
-src/timer.o: ../src/timer.c ../include/timer.h \
- ../system/include/cmsis/cmsis_device.h \
- ../system/include/cmsis/stm32f4xx.h \
+src/timer.o: ../src/timer.c ../system/include/cmsis/stm32f4xx.h \
  ../system/include/cmsis/stm32f407xx.h ../system/include/cmsis/core_cm4.h \
  ../system/include/cmsis/cmsis_version.h \
  ../system/include/cmsis/cmsis_compiler.h \
@@ -10,7 +8,6 @@ src/timer.o: ../src/timer.c ../include/timer.h \
  ../include/stm32f4xx_hal_conf.h \
  ../system/include/stm32f4-hal/stm32f4xx_hal_rcc.h \
  ../system/include/stm32f4-hal/stm32f4xx_hal_def.h \
- ../system/include/cmsis/stm32f4xx.h \
  ../system/include/stm32f4-hal/Legacy/stm32_hal_legacy.h \
  ../system/include/stm32f4-hal/stm32f4xx_hal_rcc_ex.h \
  ../system/include/stm32f4-hal/stm32f4xx_hal_gpio.h \
@@ -74,10 +71,7 @@ src/timer.o: ../src/timer.c ../include/timer.h \
  ../system/include/stm32f4-hal/stm32f4xx_hal_spdifrx.h \
  ../system/include/stm32f4-hal/stm32f4xx_hal_dfsdm.h \
  ../system/include/stm32f4-hal/stm32f4xx_hal_lptim.h \
- ../system/include/stm32f4-hal/stm32f4xx_hal_mmc.h \
- ../system/include/cortexm/exception-handlers.h
-../include/timer.h:
-../system/include/cmsis/cmsis_device.h:
+ ../system/include/stm32f4-hal/stm32f4xx_hal_mmc.h ../include/led.h
 ../system/include/cmsis/stm32f4xx.h:
 ../system/include/cmsis/stm32f407xx.h:
 ../system/include/cmsis/core_cm4.h:
@@ -90,7 +84,6 @@ src/timer.o: ../src/timer.c ../include/timer.h \
 ../include/stm32f4xx_hal_conf.h:
 ../system/include/stm32f4-hal/stm32f4xx_hal_rcc.h:
 ../system/include/stm32f4-hal/stm32f4xx_hal_def.h:
-../system/include/cmsis/stm32f4xx.h:
 ../system/include/stm32f4-hal/Legacy/stm32_hal_legacy.h:
 ../system/include/stm32f4-hal/stm32f4xx_hal_rcc_ex.h:
 ../system/include/stm32f4-hal/stm32f4xx_hal_gpio.h:
@@ -155,4 +148,4 @@ src/timer.o: ../src/timer.c ../include/timer.h \
 ../system/include/stm32f4-hal/stm32f4xx_hal_dfsdm.h:
 ../system/include/stm32f4-hal/stm32f4xx_hal_lptim.h:
 ../system/include/stm32f4-hal/stm32f4xx_hal_mmc.h:
-../system/include/cortexm/exception-handlers.h:
+../include/led.h:

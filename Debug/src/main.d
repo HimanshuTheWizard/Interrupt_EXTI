@@ -74,7 +74,7 @@ src/main.o: ../src/main.c ../system/include/cmsis/stm32f4xx.h \
  ../system/include/stm32f4-hal/stm32f4xx_hal_mmc.h \
  ../system/include/cmsis/cmsis_device.h \
  ../system/include/cmsis/stm32f4xx.h ../system/include/diag/trace.h \
- ../include/led.h
+ ../include/led.h ../include/timer.h
 ../system/include/cmsis/stm32f4xx.h:
 ../system/include/cmsis/stm32f407xx.h:
 ../system/include/cmsis/core_cm4.h:
@@ -155,3 +155,4 @@ src/main.o: ../src/main.c ../system/include/cmsis/stm32f4xx.h \
 ../system/include/cmsis/stm32f4xx.h:
 ../system/include/diag/trace.h:
 ../include/led.h:
+../include/timer.h:

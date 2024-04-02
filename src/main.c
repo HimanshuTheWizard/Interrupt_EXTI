@@ -5,6 +5,10 @@
 #include <stdlib.h>
 #include "diag/trace.h"
 #include "led.h"
+#include "timer.h"
+
+#define PROCESSOR_CLOCK			(16000000)				//16MHz
+#define PROCESSOR_CLOCK_MS		(PROCESSOR_CLOCK/1000)
 
 void main(void)
 {
@@ -31,11 +35,13 @@ void main(void)
 	{
 		if(pressed)
 		{
-			GPIOD->ODR	^= (1<<12);
+			LED_Toggle(GPIOD, 12);
 			pressed = 0;
 		}
 	}
 #endif
+
+#if 0
 	/* ===========================================================
 	 * LED and Push Button Interface
 	 * ==========================================================*/
@@ -63,6 +69,28 @@ void main(void)
 			pressed = 0;
 		}
 	}
+#endif
+
+#if 0
+	/* ===========================================================
+	 * Systick Timer
+	 * ==========================================================*/
+	uint32_t time_unit = 1000;							//ms
+
+	//enable clock for LED D3 - PORT-D(12)
+	RCC->AHB1ENR 	|= (1<<3);
+
+	//Configure systick timer
+	SysTick_Timer_Configuration(time_unit*PROCESSOR_CLOCK_MS);
+
+	//Init LED
+	LED_Init(GPIOD, 12);
+
+	//start timer
+	Start_Timer();
+
+	while(1);
+#endif
 }
 
 
