@@ -1,14 +1,27 @@
-#include "stm32f4xx.h"
-#include "stm32f4xx_hal.h"
-#include "cmsis_device.h"
+#include <gpio.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "diag/trace.h"
-#include "led.h"
 #include "timer.h"
+#include "adc.h"
 
+/*local macros*/
 #define PROCESSOR_CLOCK			(16000000)				//16MHz
 #define PROCESSOR_CLOCK_MS		(PROCESSOR_CLOCK/1000)
+
+
+/*global variable definition*/
+volatile uint16_t H = 100;
+volatile uint16_t L = 900;
+volatile uint8_t pressed = 0;
+volatile uint32_t ADC_data = 0;
+volatile uint32_t data_g;
+
+/*function prototype*/
+void EXTI_Button_Press_Callback(void);
+void SysTick_Led_Toggle_Callback(void);
+void SysTick_PWM_Callback(void);
+void ADC_Data_Read_callback(uint32_t data);
 
 void main(void)
 {
@@ -29,14 +42,16 @@ void main(void)
 	LED_Init(GPIOD, 12);
 
 	//Enable Switch in EXTI interrupt mode
-	Interrupt_Initialization(GPIOA, 0);
+	EXTI_Interrupt_Initialization(GPIOA, 0);
+
+	EXTI0_Interrupt_Config();
 
 	while(1)
 	{
 		if(pressed)
 		{
 			LED_Toggle(GPIOD, 12);
-			pressed = 0;
+			pressed = 0U;
 		}
 	}
 #endif
@@ -80,6 +95,9 @@ void main(void)
 	//enable clock for LED D3 - PORT-D(12)
 	RCC->AHB1ENR 	|= (1<<3);
 
+	//Callback registering
+	Timer_Registering_Function(&SysTick_Led_Toggle_Callback);
+
 	//Configure systick timer
 	SysTick_Timer_Configuration(time_unit*PROCESSOR_CLOCK_MS);
 
@@ -91,9 +109,103 @@ void main(void)
 
 	while(1);
 #endif
+
+#if 0
+	// L = 500ms H = 500ms
+	// Duty Cycle = H+L = 1000ms
+
+	//enable clock for LED D3 - PORT-D(12)
+	RCC->AHB1ENR 	|= (1<<3);
+
+	//enable clock for SWITCH - PORT-A(0)
+	RCC->AHB1ENR 	|= (1<<0);
+
+	//Callback registering
+	EXTI_Registering_function(&EXTI_Button_Press_Callback);
+	Timer_Registering_Function(&SysTick_PWM_Callback);
+
+	//Init LED
+	LED_Init(GPIOD, 12);
+
+	//Configure systick timer
+	SysTick_Timer_Configuration((H+L)*PROCESSOR_CLOCK_MS);
+
+	//Enable Switch in EXTI interrupt mode
+	EXTI_Interrupt_Initialization(GPIOA, 0);
+	EXTI0_Interrupt_Config();
+
+	while(1)
+	{
+		if(pressed == 1)
+		{
+			if(H < 1000)
+			{
+				H = H + 100;
+				L = 1000 - H;
+			}
+			else
+			{
+				H = 100;
+				L = 1000 - H;
+			}
+			pressed = 0;
+		}
+	}
+
+#endif
+
+#if 1
+
+	//Enable clock for GPIOC - PC0 to be used as ADC1_10
+	RCC->AHB1ENR |= (1<<2);
+
+	//Enable clock for ADC
+	RCC->APB2ENR |= (1<<8);
+
+	//ADC callback registering
+	ADC_Callback_Registering(ADC_Data_Read_callback);
+
+	ADC_Pin_Init(GPIOC, 0);
+
+	ADC_Interrupt_Configuration();
+
+	ADC_Configuration();
+
+	ADC_Start_Conversion();
+
+	while(1);
+
+#endif
+
 }
 
+void EXTI_Button_Press_Callback(void)
+{
+	pressed = 1;
+}
 
+void SysTick_Led_Toggle_Callback(void)
+{
+	LED_Toggle(GPIOD, 12);
+}
+
+void SysTick_PWM_Callback(void)
+{
+	if(Output_Pin_Status(GPIOD, 12) == 1)		//LED == high
+	{
+		LED_Low(GPIOD, 12);
+		SysTick->LOAD = ((L*PROCESSOR_CLOCK_MS) - 1);
+	}
+	else										//LED == low
+	{
+		LED_High(GPIOD, 12);
+		SysTick->LOAD = ((H*PROCESSOR_CLOCK_MS) - 1);
+	}
+}
+void ADC_Data_Read_callback(uint32_t data)
+{
+	ADC_data = data;
+}
 
 
 

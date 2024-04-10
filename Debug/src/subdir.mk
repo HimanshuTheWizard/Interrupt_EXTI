@@ -4,24 +4,27 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../src/adc.c \
+../src/gpio.c \
 ../src/initialize-hardware.c \
-../src/led.c \
 ../src/main.c \
 ../src/stm32f4xx_hal_msp.c \
 ../src/timer.c \
 ../src/write.c 
 
 C_DEPS += \
+./src/adc.d \
+./src/gpio.d \
 ./src/initialize-hardware.d \
-./src/led.d \
 ./src/main.d \
 ./src/stm32f4xx_hal_msp.d \
 ./src/timer.d \
 ./src/write.d 
 
 OBJS += \
+./src/adc.o \
+./src/gpio.o \
 ./src/initialize-hardware.o \
-./src/led.o \
 ./src/main.o \
 ./src/stm32f4xx_hal_msp.o \
 ./src/timer.o \

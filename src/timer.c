@@ -1,5 +1,15 @@
+#include <gpio.h>
 #include "stm32f4xx.h"
-#include "led.h"
+
+#define PROCESSOR_CLOCK			(16000000)				//16MHz
+#define PROCESSOR_CLOCK_MS		(PROCESSOR_CLOCK/1000)
+
+void (*Timer_fptr)(void);
+
+void Timer_Registering_Function(void (*callback)(void))
+{
+	Timer_fptr = callback;
+}
 
 void SysTick_Timer_Configuration(uint32_t ticks)
 {
@@ -16,5 +26,12 @@ void Start_Timer(void)
 
 void SysTick_Handler(void)
 {
-	LED_Toggle(GPIOD, 12);
+    Timer_fptr();
 }
+
+
+
+
+
+
+
