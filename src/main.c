@@ -15,7 +15,6 @@ volatile uint16_t H = 100;
 volatile uint16_t L = 900;
 volatile uint8_t pressed = 0;
 volatile uint32_t ADC_data = 0;
-volatile uint32_t data_g;
 volatile uint32_t sysTickCounter = 0;
 
 /*function prototype*/
@@ -24,6 +23,7 @@ void SysTick_Led_Toggle_Callback(void);
 void SysTick_PWM_Callback(void);
 void ADC_Data_Read_callback(uint32_t data);
 void delay_ms_callback(void);
+void delay_ms(uint32_t ms);
 
 void main(void)
 {
@@ -46,6 +46,7 @@ void main(void)
 	//Enable Switch in EXTI interrupt mode
 	EXTI_Interrupt_Initialization(GPIOA, 0);
 
+	//configure EXTI0 interrupt
 	EXTI0_Interrupt_Config();
 
 	while(1)
@@ -60,7 +61,7 @@ void main(void)
 
 #if 0
 	/* ===========================================================
-	 * LED and Push Button Interface
+	 * LED and Push Button Interface - polling mode
 	 * ==========================================================*/
 	//enable clock for LED D3 - PORT-D(12)
 	RCC->AHB1ENR 	|= (1<<3);
@@ -90,7 +91,7 @@ void main(void)
 
 #if 0
 	/* ===========================================================
-	 * Systick Timer
+	 * Toggle LED with SysTick Timer
 	 * ==========================================================*/
 	uint32_t time_unit = 1000;							//ms
 
@@ -113,6 +114,11 @@ void main(void)
 #endif
 
 #if 0
+
+	/* ===========================================================
+	 * Timer, PWM, GPIO and push button interface
+	 * ==========================================================*/
+
 	// L = 500ms H = 500ms
 	// Duty Cycle = H+L = 1000ms
 
@@ -158,25 +164,36 @@ void main(void)
 
 #if 1
 
+	/* ===========================================================
+	 * ADC - Interrupt mode
+	 * ==========================================================*/
+
 	uint32_t time_unit = 1000;							//ms
 
 	//Enable clock for GPIOC - PC0 to be used as ADC1_10
 	RCC->AHB1ENR |= (1<<2);
 
-	//Enable clock for ADC
+	//Enable clock for ADC1
 	RCC->APB2ENR |= (1<<8);
 
+	//configure sysTick with 1 ms frequency
 	SysTick_Timer_Configuration(time_unit*PROCESSOR_CLOCK_MS);
 
+	//callback registering function
 	Timer_Registering_Function(&delay_ms_callback);
+	ADC_Callback_Registering(&ADC_Data_Read_callback);
 
+	//enable ADC pins
 	ADC_Pin_Init(GPIOC, 0);
 
-	ADC_Interrupt_Configuration();
+	//ADC interrupt configure through NVIC
+	ADC1_Interrupt_Configuration();
 
-	ADC_Configuration();
+	//ADC interrupt configure
+	ADC1_Configuration();
 
-	ADC_Start_Conversion();
+	//start ADC conversion
+	ADC1_Start_Conversion();
 
 	while(1);
 

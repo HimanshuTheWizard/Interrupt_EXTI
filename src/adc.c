@@ -14,7 +14,7 @@ void ADC_Pin_Init(GPIO_TypeDef *port, uint8_t pin)
 	port->MODER	  |= (1<<((2*pin)+1));
 }
 
-void ADC_Configuration(void)
+void ADC1_Configuration(void)
 {
 	//00: 12-bit resolution (15 ADCCLK cycles)
 	//5- EOC interrupt enable
@@ -34,13 +34,13 @@ void ADC_Configuration(void)
 
 }
 
-void ADC_Interrupt_Configuration(void)
+void ADC1_Interrupt_Configuration(void)
 {
 	NVIC->IP[18]	 = (1<<4);				// set priority to 1
 	NVIC->ISER[0] 	|= (1<<18);				// enable interrupt
 }
 
-void ADC_Start_Conversion(void)
+void ADC1_Start_Conversion(void)
 {
 	//SWSTART bit is set to start conversion
 	ADC1->CR2 |= (1<<30);
@@ -48,15 +48,13 @@ void ADC_Start_Conversion(void)
 
 void ADC_IRQHandler(void)
 {
-	//data_g = (ADC1->DR & 0x0000FFFF);
-	//uint16_t data_l;
-	//data_l = (ADC1->DR & 0x0000FFFF);
-	//adc_callback_fptr(data_l);
-	//EOC bit gets cleared on reading DR register
+	uint16_t data_l;
 	if((ADC1->SR >> 1) & 0x1)
 	{
-		val = ADC1->DR;
+		data_l = (ADC1->DR & 0x0000FFFF);
+		adc_callback_fptr(data_l);
 	}
+	//EOC bit gets cleared on reading DR register
 }
 
 
