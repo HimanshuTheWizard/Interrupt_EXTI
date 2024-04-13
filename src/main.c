@@ -16,12 +16,14 @@ volatile uint16_t L = 900;
 volatile uint8_t pressed = 0;
 volatile uint32_t ADC_data = 0;
 volatile uint32_t data_g;
+volatile uint32_t sysTickCounter = 0;
 
 /*function prototype*/
 void EXTI_Button_Press_Callback(void);
 void SysTick_Led_Toggle_Callback(void);
 void SysTick_PWM_Callback(void);
 void ADC_Data_Read_callback(uint32_t data);
+void delay_ms_callback(void);
 
 void main(void)
 {
@@ -156,14 +158,17 @@ void main(void)
 
 #if 1
 
+	uint32_t time_unit = 1000;							//ms
+
 	//Enable clock for GPIOC - PC0 to be used as ADC1_10
 	RCC->AHB1ENR |= (1<<2);
 
 	//Enable clock for ADC
 	RCC->APB2ENR |= (1<<8);
 
-	//ADC callback registering
-	ADC_Callback_Registering(ADC_Data_Read_callback);
+	SysTick_Timer_Configuration(time_unit*PROCESSOR_CLOCK_MS);
+
+	Timer_Registering_Function(&delay_ms_callback);
 
 	ADC_Pin_Init(GPIOC, 0);
 
@@ -205,6 +210,20 @@ void SysTick_PWM_Callback(void)
 void ADC_Data_Read_callback(uint32_t data)
 {
 	ADC_data = data;
+}
+
+void delay_ms_callback(void)
+{
+	if(sysTickCounter != 0)
+	{
+		sysTickCounter--;
+	}
+}
+
+void delay_ms(uint32_t ms)
+{
+	sysTickCounter = ms;
+	while(sysTickCounter!=0);
 }
 
 
