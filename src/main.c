@@ -226,7 +226,7 @@ void main(void)
 	while(1)
 	{
 		acc_read();
-		delay_ms(20);
+		delay_ms(2);
 	}
 #endif
 

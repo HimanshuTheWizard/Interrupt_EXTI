@@ -15,8 +15,8 @@
 
 void SPI_GPIO_Init(void);
 void SPI_Init();
-uint8_t SPI_Data_Read(uint8_t addr);
-uint8_t Data_Transmit(uint8_t data);
+uint16_t SPI_Data_Read(uint8_t addr);
+uint16_t Data_Transmit(uint8_t data);
 void acc_init(void);
 void acc_write(uint8_t addr,uint8_t data);
 void acc_read(void);

@@ -3955,7 +3955,7 @@ END GROUP
                 0x2001fc00                        __Main_Stack_Limit = (__stack - __Main_Stack_Size)
                 [!provide]                        PROVIDE (_Main_Stack_Limit = __Main_Stack_Limit)
                 0x00000100                        _Minimum_Stack_Size = 0x100
-                0x20000124                        PROVIDE (_Heap_Begin = _end_noinit)
+                0x20000128                        PROVIDE (_Heap_Begin = _end_noinit)
                 0x2001fc00                        PROVIDE (_Heap_Limit = (__stack - __Main_Stack_Size))
 
 .isr_vector     0x08000000      0x3e8
@@ -4078,7 +4078,7 @@ END GROUP
                 0x08000400                        __data_regions_array_end = .
                 0x08000400                        __bss_regions_array_start = .
                 0x08000400        0x4 LONG 0x2000006c ADDR (.bss)
-                0x08000404        0x4 LONG 0x20000124 (ADDR (.bss) + SIZEOF (.bss))
+                0x08000404        0x4 LONG 0x20000128 (ADDR (.bss) + SIZEOF (.bss))
                 0x08000408        0x4 LONG 0x10000000 ADDR (.bss_CCMRAM)
                 0x0800040c        0x4 LONG 0x10000000 (ADDR (.bss_CCMRAM) + SIZEOF (.bss_CCMRAM))
                 0x08000410                        __bss_regions_array_end = .
@@ -4403,7 +4403,7 @@ END GROUP
 .bss_CCMRAM     0x10000000        0x0
  *(.bss.CCMRAM .bss.CCMRAM.*)
 
-.bss            0x2000006c       0xb8
+.bss            0x2000006c       0xbc
                 0x2000006c                        __bss_start__ = .
                 0x2000006c                        _sbss = .
  *(.bss_begin .bss_begin.*)
@@ -4418,58 +4418,58 @@ END GROUP
  .bss.errno     0x2000007c        0x4 ./system/src/newlib/syscalls.o
                 0x2000007c                errno
  .bss.buf.0     0x20000080       0x80 ./system/src/diag/trace.o
- .bss.zz        0x20000100        0x1 ./src/SPI.o
+ .bss.zz        0x20000100        0x2 ./src/SPI.o
                 0x20000100                zz
- .bss.yy        0x20000101        0x1 ./src/SPI.o
-                0x20000101                yy
- .bss.xx        0x20000102        0x1 ./src/SPI.o
-                0x20000102                xx
- *fill*         0x20000103        0x1 
+ .bss.yy        0x20000102        0x2 ./src/SPI.o
+                0x20000102                yy
+ .bss.xx        0x20000104        0x2 ./src/SPI.o
+                0x20000104                xx
+ *fill*         0x20000106        0x2 
  .bss.adc_callback_fptr
-                0x20000104        0x4 ./src/adc.o
-                0x20000104                adc_callback_fptr
+                0x20000108        0x4 ./src/adc.o
+                0x20000108                adc_callback_fptr
  .bss.EXTI_fptr
-                0x20000108        0x4 ./src/gpio.o
-                0x20000108                EXTI_fptr
+                0x2000010c        0x4 ./src/gpio.o
+                0x2000010c                EXTI_fptr
  .bss.sysTickCounter
-                0x2000010c        0x4 ./src/main.o
-                0x2000010c                sysTickCounter
+                0x20000110        0x4 ./src/main.o
+                0x20000110                sysTickCounter
  .bss.Timer_fptr
-                0x20000110        0x4 ./src/timer.o
-                0x20000110                Timer_fptr
+                0x20000114        0x4 ./src/timer.o
+                0x20000114                Timer_fptr
  .bss.__malloc_sbrk_start
-                0x20000114        0x4 /Applications/ArmGNUToolchain/13.2.Rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp/libg_nano.a(libc_a-mallocr.o)
-                0x20000114                __malloc_sbrk_start
- .bss.__malloc_free_list
                 0x20000118        0x4 /Applications/ArmGNUToolchain/13.2.Rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp/libg_nano.a(libc_a-mallocr.o)
-                0x20000118                __malloc_free_list
+                0x20000118                __malloc_sbrk_start
+ .bss.__malloc_free_list
+                0x2000011c        0x4 /Applications/ArmGNUToolchain/13.2.Rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp/libg_nano.a(libc_a-mallocr.o)
+                0x2000011c                __malloc_free_list
  .bss.__lock___malloc_recursive_mutex
-                0x2000011c        0x1 /Applications/ArmGNUToolchain/13.2.Rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp/libg_nano.a(libc_a-lock.o)
-                0x2000011c                __lock___malloc_recursive_mutex
+                0x20000120        0x1 /Applications/ArmGNUToolchain/13.2.Rel1/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/13.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/nofp/libg_nano.a(libc_a-lock.o)
+                0x20000120                __lock___malloc_recursive_mutex
  *(COMMON)
  *(.bss_end .bss_end.*)
- *fill*         0x2000011d        0x3 
- .bss_end       0x20000120        0x4 ./system/src/newlib/startup.o
-                0x20000124                        . = ALIGN (0x4)
-                0x20000124                        __bss_end__ = .
-                0x20000124                        _ebss = .
+ *fill*         0x20000121        0x3 
+ .bss_end       0x20000124        0x4 ./system/src/newlib/startup.o
+                0x20000128                        . = ALIGN (0x4)
+                0x20000128                        __bss_end__ = .
+                0x20000128                        _ebss = .
 
 .noinit_CCMRAM
  *(.noinit.CCMRAM .noinit.CCMRAM.*)
 
-.noinit         0x20000124        0x0
-                0x20000124                        _noinit = .
+.noinit         0x20000128        0x0
+                0x20000128                        _noinit = .
  *(.noinit .noinit.*)
-                0x20000124                        . = ALIGN (0x4)
-                0x20000124                        _end_noinit = .
+                0x20000128                        . = ALIGN (0x4)
+                0x20000128                        _end_noinit = .
                 [!provide]                        PROVIDE (end = _end_noinit)
                 [!provide]                        PROVIDE (_end = _end_noinit)
                 [!provide]                        PROVIDE (__end = _end_noinit)
                 [!provide]                        PROVIDE (__end__ = _end_noinit)
 
-._check_stack   0x20000124      0x100
-                0x20000224                        . = (. + _Minimum_Stack_Size)
- *fill*         0x20000124      0x100 
+._check_stack   0x20000128      0x100
+                0x20000228                        . = (. + _Minimum_Stack_Size)
+ *fill*         0x20000128      0x100 
 
 .b1text
  *(.b1text)

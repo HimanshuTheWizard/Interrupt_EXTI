@@ -18,9 +18,9 @@ uint16_t SPI_Data;
 #define Out_Y				(0x2B)
 #define Out_Z				(0x2D)
 
-uint8_t xx;
-uint8_t yy;
-uint8_t zz;
+uint16_t xx;
+uint16_t yy;
+uint16_t zz;
 
 void SPI_Init(void)
 {
@@ -42,9 +42,9 @@ void SPI_Init(void)
 /*
  * addr - address of the register in slave that has to be read
  */
-uint8_t SPI_Data_Read(uint8_t addr)
+uint16_t SPI_Data_Read(uint8_t addr)
 {
-	uint8_t ret_data;
+	uint16_t ret_data;
 
 	//reset the PE3(CS) bit to enable connect with slave
 	GPIOE->BSRR |= GPIO_BSRR_BR3;
@@ -64,9 +64,9 @@ uint8_t SPI_Data_Read(uint8_t addr)
 	return ret_data;
 }
 
-uint8_t Data_Transmit(uint8_t data)
+uint16_t Data_Transmit(uint8_t data)
 {
-	uint8_t received_data;
+	uint16_t received_data;
 
 	//wait for transmit buffer to get empty
 	while(!(SPI1->SR & 0x2));
