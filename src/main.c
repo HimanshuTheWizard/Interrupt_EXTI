@@ -4,6 +4,7 @@
 #include "diag/trace.h"
 #include "timer.h"
 #include "adc.h"
+#include "spi.h"
 
 /*local macros*/
 #define PROCESSOR_CLOCK			(16000000)				//16MHz
@@ -162,7 +163,7 @@ void main(void)
 
 #endif
 
-#if 1
+#if 0
 
 	/* ===========================================================
 	 * ADC - Interrupt mode
@@ -197,6 +198,36 @@ void main(void)
 
 	while(1);
 
+#endif
+
+#if 1
+	uint32_t time_unit = 1000;							//ms
+
+	//Enable clock for SPI1
+	RCC->APB2ENR |= (1<<12);
+
+	//Enable clock for port A
+	RCC->AHB1ENR |= (1<<0);
+
+	//configure sysTick with 1 ms frequency
+	SysTick_Timer_Configuration(time_unit*PROCESSOR_CLOCK_MS);
+
+	//callback registering function
+	Timer_Registering_Function(&delay_ms_callback);
+
+	SPI_GPIO_Init();
+
+	SPI_Init();
+
+	acc_init();
+
+	GPIOE->BSRR |= GPIO_BSRR_BS3;
+
+	while(1)
+	{
+		acc_read();
+		delay_ms(20);
+	}
 #endif
 
 }
