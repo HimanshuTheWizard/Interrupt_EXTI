@@ -5,3 +5,4 @@ This project implement various peripherals as baremetal on STM32f407. Some of th
 3. EXTI interrupt
 4. ADC in inteerupt mode
 5. PWM
+6. SPI communication with Accelerometer
